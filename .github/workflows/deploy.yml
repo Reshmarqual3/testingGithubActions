@@ -5,30 +5,29 @@ on:
     branches: ["main"]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'vscodegithub0001'
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
-  PYTHON_VERSION: '3.11'
+  AZURE_FUNCTIONAPP_NAME: 'vscodegithub0001'   # Replace with your Azure Function App name
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'         # Path to the function app
+  PYTHON_VERSION: '3.9'                       
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: dev
+
     steps:
-    - name: 'Checkout GitHub Action'
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: 'Install Dependencies'
+    - name: Install dependencies
       run: |
-        cd ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
         python -m pip install --upgrade pip
         pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-    - name: 'Deploy to Azure Function App'
+    - name: Deploy to Azure Function App
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
